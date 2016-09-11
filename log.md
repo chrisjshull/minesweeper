@@ -15,6 +15,17 @@ use _ for weak private ...
 
 instead of text color, used background color - more readable, IM)
 
+colors should pass contrast AX standards
+
+you cn navigate this with the keyboard
+(you can also use tab/shift-tab, or your screen readaer's keys)
+
+Accessibility tested most with VoiceOver in Safari (desktop).
+
+Using an emoji for the mine is fun, but could lead to cross-platform issues.
+Would likely want to replace that.
+(Fun fact though: VoiceOver speaks "bomb" quite nicely.)
+
 
 goals:
 learn new build tooling

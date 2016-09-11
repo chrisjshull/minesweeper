@@ -5,11 +5,13 @@ export const thText = i => i >= 0 ? String.fromCharCode(i + 65) : '';
 
 export default class Board extends View {
     static get observables() {
-        return ['isReady'];
+        return ['isReady', 'winState'];
     }
 
     get template() {
-        return '<div role="grid"></div>';
+        // Set tabindex so there's always a way for the non-screenreader
+        // keyboard user to focus the table (and get access to arrow controls).
+        return '<div tabindex="0" role="grid"></div>';
     }
 
     constructor(opts) {
@@ -20,30 +22,22 @@ export default class Board extends View {
         this._width = width;
         this._height = height;
         this.isReady = false;
-        this._isOver = false;
+        this.winState = null;
 
         this._rows = this._generateRows(width, height);
+        this._setupCells();
+
+        this._addListeners();
+
+        this.isReady = true;
+    }
+
+    _setupCells() {
         this._plantMines();
 
-        // Normally we'd want some role="columnheader" role="rowheader"
-        // but we've added labels to the cells/buttons that cover that need (better)
-        this.$element.append(
-            $('<div aria-hidden="true">').append(
-                ...arrayGenerate(width + 1, x => $('<div aria-hidden="true">').text(thText(x-1)))
-            ),
-            ...this._rows.map((row, y) => {
-                return $('<div role="row">').append(
-                    $('<div aria-hidden="true">').text(thText(y)),
-                    ...row.map(cell => cell.$element)
-                );
-            })
-        );
-
-
+        // watch for possible gameover triggers
         for (const cell of this._eachCell()) {
-            cell.observe('isRevealed', isRevealed => {
-                if (!isRevealed) return;
-
+            cell.observe('isRevealed', () => {
                 if (cell.hasMine) {
                     this._gameOver(false);
                 } else {
@@ -54,7 +48,57 @@ export default class Board extends View {
             });
         }
 
-        this.isReady = true;
+        // set up DOM
+        // Normally we'd want some role="columnheader" role="rowheader"
+        // but we've added labels to the cells/buttons that cover that need (better)
+        this.$element.append(
+            $('<div aria-hidden="true">').append(
+                ...arrayGenerate(this._width + 1, x => $('<div aria-hidden="true">').text(thText(x-1)))
+            ),
+            ...this._rows.map((row, y) => {
+                return $('<div role="row">').append(
+                    $('<div aria-hidden="true">').text(thText(y)),
+                    ...row.map(cell => cell.$element)
+                );
+            })
+        );
+
+    }
+
+    _addListeners() {
+        this.$element.on('keydown', evt => {
+            const isRTL = $('html[dir="rtl"]').length;
+
+            const moveBy = (x, y) => {
+                const view = View.forElement(document.activeElement);
+                let newCell;
+                if (view === this) {
+                    newCell = this._rows[0][0];
+                } else if (view instanceof Cell) {
+                    newCell = this.cellAt(view.x + x, view.y + y, true);
+                } else {
+                    return;
+                }
+                newCell.focus();
+
+                evt.preventDefault();
+            };
+
+            switch (evt.which) {
+            case 37: // left
+                moveBy(isRTL ? 1 : -1, 0);
+                break;
+            case 39: // right
+                moveBy(isRTL ? -1 : 1, 0);
+                break;
+            case 38: // up
+                moveBy(0, -1);
+                break;
+            case 40: // down
+                moveBy(0, 1);
+                break;
+            }
+        });
     }
 
     _checkForWin() {
@@ -70,11 +114,9 @@ export default class Board extends View {
     }
 
     _gameOver(hasWon) {
-        if (this._isOver) return;
-        this._isOver = true;
+        if (this.winState) return;
+        this.winState = hasWon ? 'win' : 'lose';
         // todo: remove all listeners
-
-        alert(hasWon);
     }
 
     get _eachCell() {
@@ -85,8 +127,13 @@ export default class Board extends View {
         };
     }
 
-    cellAt(x, y) {
-        if (x < 0 || x >= this._width || y < 0 || y >= this._height) return null;
+    cellAt(x, y, wrap=false) {
+        if (wrap) {
+            x = (x + this._width) % this._width;
+            y = (y + this._height) % this._height;
+        } else if (x < 0 || x >= this._width || y < 0 || y >= this._height) {
+            return null;
+        }
         return this._rows[y][x];
     }
 

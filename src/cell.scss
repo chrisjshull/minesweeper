@@ -28,6 +28,10 @@
     button:active {
         box-shadow: inset 0 0 0 2px hsl(0, 0%, 100%);
     }
+    button[disabled] {
+        box-shadow: none;
+        cursor: default;
+    }
 
     // &:hover:not([data-shown])
 

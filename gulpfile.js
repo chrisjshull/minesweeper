@@ -38,7 +38,7 @@ const license = () => {
 const globalJS = () => {
     return insert.prepend([
         require.resolve('babel-polyfill/dist/polyfill.js'),
-        require.resolve('jquery')
+        require.resolve('jquery'),
     ].map(e => fs.readFileSync(e, 'utf8') + '\n\n').join(''));
 };
 

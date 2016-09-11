@@ -17,6 +17,13 @@ const $elementCache = new Map();
 // mix(Base).with(Obs)
 
 export default class View extends Base {
+    static forElement($element) {
+        // handle raw DOM too
+        const element = $($element).closest('.view')[0];
+        if (!element) return;
+        return element._view;
+    }
+
     static get _classNames() {
         const cached = classNameCache.get(this);
         if (cached) return cached;
@@ -54,5 +61,6 @@ export default class View extends Base {
         }
 
         this.$element = $element;
+        $element[0]._view = this;
     }
 }

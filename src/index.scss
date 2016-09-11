@@ -5,26 +5,53 @@
 
 body {
     text-align: center;
+    // Underwood Champion is serifed, but I like sans-serif as a fallback better
     font-family: 'Underwood Champion', sans-serif;
+    padding-bottom: 1rem;;
 }
 
 h1 {
     font-weight: normal;
-
+    margin-bottom: 0.2em;
 }
 
+button, a {
+    border: none;
+    background: none;
+    color: hsl(212, 94%, 47%);
+    cursor: pointer;
+    padding: 0;
+    text-decoration: none;
 
+    &:hover, &:focus {
+        outline: none;
+        text-decoration: underline;
+    }
+    &:active {
+        color: hsl(212, 94%, 32%);
+    }
+}
 
-@font-face {
-    font-family: 'MyUnderwood';
-    src: url('myunderwood_regular/MyUnderwood-webfont.eot');
-    src: url('myunderwood_regular/MyUnderwood-webfont.eot?#iefix') format('embedded-opentype'),
-         url('myunderwood_regular/MyUnderwood-webfont.woff') format('woff'),
-         url('myunderwood_regular/MyUnderwood-webfont.ttf') format('truetype'),
-         url('myunderwood_regular/MyUnderwood-webfont.svg#my_underwoodregular') format('svg');
-    font-weight: normal;
-    font-style: normal;
+footer {
+    margin-top: 1em;
+}
 
+.toolbar {
+    display: flex;
+    width: calc(100% - 2em);
+    max-width: 45rem;
+    margin: auto;
+
+    [role="alert"] {
+        flex-grow: 1;
+        text-align: end;
+        padding: 0 1em;
+
+        &:focus {
+            outline: none;
+            text-decoration: underline;
+        }
+    }
 }
 
 @font-face {

@@ -42,8 +42,10 @@ export default class Base {
                     // In practice this should rarely be an issue
                     // and if so one can always access the property
                     // on the object.
+                    const observersAtTriggerTime = new Set(this._observers[key]);
                     setTimeout(() => {
-                        this._observers[key].forEach(fcn => {
+                        observersAtTriggerTime.forEach(fcn => {
+                            if (!this._observers[key].has(fcn)) return; // skip if added after trigger
                             const result = fcn(newValue, oldValue, key, this);
                             if (result === false) this.unobserve(key, fcn);
                         });

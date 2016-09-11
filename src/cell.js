@@ -16,8 +16,8 @@ export default class Cell extends View {
         super(opts);
 
         this._board = board;
-        this._x = x;
-        this._y = y;
+        this.x = x;
+        this.y = y;
         this.hasMine = false;
         this.isRevealed = false;
 
@@ -26,6 +26,8 @@ export default class Cell extends View {
 
         this.$element.on('click', () => {
             this.reveal();
+
+            if (this.hasMine) return; // no need to force focus on lose
 
             // force refocus to tickle screen reader
             setTimeout(() => {
@@ -36,18 +38,16 @@ export default class Cell extends View {
             });
         });
 
-//         board.observe('isReady', isReady => {
-//             if (!isReady) return;
-//             // this.reveal();
-//             return false; // stop observing
-//         });
+        board.observe('winState', () => {
+            this.$element.find('button').attr('disabled', true);
+        });
     }
 
     get _neighbors() {
         return function* () {
-            for (let x = this._x - 1; x <= this._x + 1; x++) {
-                for (let y = this._y - 1; y <= this._y + 1; y++) {
-                    if (x === this._x && y === this._y) continue;
+            for (let x = this.x - 1; x <= this.x + 1; x++) {
+                for (let y = this.y - 1; y <= this.y + 1; y++) {
+                    if (x === this.x && y === this.y) continue;
                     const cell = this._board.cellAt(x, y);
                     if (cell) yield cell;
                 }
@@ -73,6 +73,14 @@ export default class Cell extends View {
             for (const cell of this._neighbors()) {
                 cell.reveal();
             }
+        }
+    }
+
+    focus() {
+        if (!this.isRevealed) {
+            this.$element.find('button').focus();
+        } else {
+            this.$element.focus();
         }
     }
 }
