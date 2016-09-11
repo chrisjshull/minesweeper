@@ -1,5 +1,6 @@
 import View from './view';
-import template from './cell.html';
+
+import {thText} from './board';
 
 export default class Cell extends View {
     static get observables() {
@@ -7,7 +8,7 @@ export default class Cell extends View {
     }
 
     get template() {
-        return template;
+        return '<div role="gridcell" tabindex="-1"><button></button></div>';
     }
 
     constructor(opts) {
@@ -20,8 +21,19 @@ export default class Cell extends View {
         this.hasMine = false;
         this.isRevealed = false;
 
+        // for spoken consistency, apply the label to both elements
+        this.$element.find('button').add(this.$element).attr('aria-label', `${thText(x)} × ${thText(y)}`);
+
         this.$element.on('click', () => {
             this.reveal();
+
+            // force refocus to tickle screen reader
+            setTimeout(() => {
+                document.activeElement.blur();
+                setTimeout(() => {
+                    this.$element.focus();
+                });
+            });
         });
 
 //         board.observe('isReady', isReady => {

@@ -7,14 +7,29 @@
 }
 
 .cell {
-    border: 1px solid #999;
-    text-align: center;
-    width: 1.5em;
-    height: 1.5em;
+    box-sizing: border-box;
 
-    &:not([data-shown]) {
+    // button just here for AX reasons
+    button {
+        user-select: none; // hide text cursor when keyboard navigating
+        width: 100%;
+        height: 100%;
+        border: none;
+        padding: 0;
+        cursor: pointer;
         background-color: hsl(0, 0%, 90%);
     }
+
+    // after we remove the button, the cell can still get focus
+    button:focus, button:hover, &:focus {
+        box-shadow: inset 0 0 0 1px hsl(0, 0%, 40%);
+        outline: none;
+    }
+    button:active {
+        box-shadow: inset 0 0 0 2px hsl(0, 0%, 100%);
+    }
+
+    // &:hover:not([data-shown])
 
     @include for-count(1, hsl(209, 90%, 95%));
     @include for-count(2, hsl(100, 46%, 86%));
@@ -24,4 +39,16 @@
     @include for-count(6, hsl(270, 34%, 80%));
     @include for-count(7, hsl(270, 34%, 40%), #fff);
     @include for-count(8, #000, #fff);
+
+    border: 1px solid #999;
+    // simuluate border collapse
+    :not(:last-child) > & {
+        border-bottom: none;
+    }
+    html:not([dir="rtl"]) &:not(:last-child) {
+        border-right: none;
+    }
+    html[dir="rtl"] &:not(:last-child) {
+        border-left: none;
+    }
 }

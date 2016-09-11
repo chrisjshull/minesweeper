@@ -39,6 +39,8 @@ export default class View extends Base {
     constructor() {
         super();
 
+        // cache an element to deep cline to avoid
+        // html parsing hit over and over
         let $element;
         const $cachedElement = $elementCache.get(this);
         if ($cachedElement) {

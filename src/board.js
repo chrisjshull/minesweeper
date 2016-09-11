@@ -1,6 +1,7 @@
 import Cell from './cell';
 import View from './view';
-import template from './board.html';
+
+export const thText = i => i >= 0 ? String.fromCharCode(i + 65) : '';
 
 export default class Board extends View {
     static get observables() {
@@ -8,7 +9,7 @@ export default class Board extends View {
     }
 
     get template() {
-        return template;
+        return '<div role="grid"></div>';
     }
 
     constructor(opts) {
@@ -24,15 +25,15 @@ export default class Board extends View {
         this._rows = this._generateRows(width, height);
         this._plantMines();
 
-        const thText = i => i ? String.fromCharCode(i + 64) : '';
-
+        // Normally we'd want some role="columnheader" role="rowheader"
+        // but we've added labels to the cells/buttons that cover that need (better)
         this.$element.append(
-            $('<tr>').append(
-                ...arrayGenerate(width + 1, i => $('<th scope="col">').text(thText(i)))
+            $('<div aria-hidden="true">').append(
+                ...arrayGenerate(width + 1, x => $('<div aria-hidden="true">').text(thText(x-1)))
             ),
-            ...this._rows.map((row, i) => {
-                return $('<tr>').append(
-                    $('<th scope="row">').text(thText(i+1)),
+            ...this._rows.map((row, y) => {
+                return $('<div role="row">').append(
+                    $('<div aria-hidden="true">').text(thText(y)),
                     ...row.map(cell => cell.$element)
                 );
             })

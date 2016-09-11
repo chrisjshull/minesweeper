@@ -34,6 +34,14 @@ tests
 reveal animation
 
 
+while I started protoyping with a plain `<table>`,
+I ended up not using table layout because inner-cell layout
+is so persnickety. (despite being semantic elements, this
+cuased Safari not to recognize their sematics anymore, so switched to
+`<div>`s with ARIA)
+
+
+
 Features to cover in your implementation:
 Consistent display of the game board
 Implementation of the square uncovering algorithm above

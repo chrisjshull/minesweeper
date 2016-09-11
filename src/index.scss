@@ -1,6 +1,42 @@
 @import "normalize";
-table {
-    border-collapse: collapse;
+
+@import "board";
+@import "cell";
+
+body {
+    text-align: center;
+    font-family: 'Underwood Champion', sans-serif;
 }
 
-@import "cell";
+h1 {
+    font-weight: normal;
+
+}
+
+
+
+@font-face {
+    font-family: 'MyUnderwood';
+    src: url('myunderwood_regular/MyUnderwood-webfont.eot');
+    src: url('myunderwood_regular/MyUnderwood-webfont.eot?#iefix') format('embedded-opentype'),
+         url('myunderwood_regular/MyUnderwood-webfont.woff') format('woff'),
+         url('myunderwood_regular/MyUnderwood-webfont.ttf') format('truetype'),
+         url('myunderwood_regular/MyUnderwood-webfont.svg#my_underwoodregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Underwood Champion';
+    src: url('underwoodchampion_regular/underwood_champion-webfont.eot');
+    src: url('underwoodchampion_regular/underwood_champion-webfont.eot?#iefix') format('embedded-opentype'),
+         url('underwoodchampion_regular/underwood_champion-webfont.woff') format('woff'),
+         url('underwoodchampion_regular/underwood_champion-webfont.ttf') format('truetype'),
+         url('underwoodchampion_regular/underwood_champion-webfont.svg#underwood_championregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+

@@ -3,6 +3,7 @@
 
 import Board from './board';
 
-const board = new Board({width: 9, height: 9, mineCount: 1});
+const board = new Board({width: 9, height: 9, mineCount: 10});
 
-$('body').append(board.$element);
+$('body').append("<h1>Minesweeper</h1>")
+    .append(board.$element);

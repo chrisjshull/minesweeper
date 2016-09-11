@@ -1,0 +1,33 @@
+
+
+.board {
+    display: inline-block;
+
+    & > * { // rows
+        display: flex; // avoid an odd layout issue with inline-block
+    }
+
+    // Keep to width of screen when 9x9 (+headings).
+    // Okay with vertical scroll since game info is at the top anyway.
+    // Also leave a bit of side padding.
+    font-size: calc(5vw - 0.1rem);
+
+    @media (min-width: 45rem) {
+        & {
+            font-size: 2.25rem;
+        }
+    }
+
+    & > * > * { // cells and row/columnheaders
+        font-size: 1em;
+        text-align: center;
+        display: inline-block;
+        width: 2em;
+        height: 2em;
+
+        // lacking table layout, center vertically
+        line-height: 2em;
+    }
+}
+
+
