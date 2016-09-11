@@ -13,6 +13,7 @@ use _ for weak private ...
 
 // board captures clicks on gameover?
 
+instead of text color, used background color - more readable, IM)
 
 
 goals:
@@ -27,7 +28,10 @@ tests
 
 todo:
 get babel to happen pre-sourcemap
-
+gulp serve/watch should not exit on error
+docs
+tests
+reveal animation
 
 
 Features to cover in your implementation:

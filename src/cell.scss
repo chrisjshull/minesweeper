@@ -1,0 +1,27 @@
+
+@mixin for-count($ct, $background-color, $color: null) {
+    &[data-shown="#{$ct}"] {
+        background-color: $background-color;
+        @if $color { color: $color;  }
+    }
+}
+
+.cell {
+    border: 1px solid #999;
+    text-align: center;
+    width: 1.5em;
+    height: 1.5em;
+
+    &:not([data-shown]) {
+        background-color: hsl(0, 0%, 90%);
+    }
+
+    @include for-count(1, hsl(209, 90%, 95%));
+    @include for-count(2, hsl(100, 46%, 86%));
+    @include for-count(3, hsl(51, 93%, 80%));
+    @include for-count(4, hsl(32, 84%, 80%));
+    @include for-count(5, hsl(11, 93%, 80%));
+    @include for-count(6, hsl(270, 34%, 80%));
+    @include for-count(7, hsl(270, 34%, 40%), #fff);
+    @include for-count(8, #000, #fff);
+}

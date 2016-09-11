@@ -25,6 +25,7 @@
     "gulp-serve": "^1.4.0",
     "gulp-sourcemaps": "^1.6.0",
     "jquery": "^3.1.0",
+    "mixwith": "^0.1.1",
     "normalize.css": "^4.2.0",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-plugin-commonjs": "^4.1.0",

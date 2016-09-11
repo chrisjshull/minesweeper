@@ -1,8 +1,6 @@
 @import "normalize";
-
-.foo {
-    color: blue;
-    display: flex;
+table {
+    border-collapse: collapse;
 }
 
-// todo: simple reset
+@import "cell";

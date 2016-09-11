@@ -1,10 +1,22 @@
+import Base from './base';
 
 const classNameCache = new Map();
-export default class View {
-    static get template() {
-        return "<div></div>";
-    }
+const $elementCache = new Map();
 
+// const Obs = Superclass => class extends Superclass {
+//     constructor() {
+//         super(...arguments);
+//         this._observableKeys = new Set();
+//     }
+//
+//     observe(key) {
+//
+//     }
+// };
+
+// mix(Base).with(Obs)
+
+export default class View extends Base {
     static get _classNames() {
         const cached = classNameCache.get(this);
         if (cached) return cached;
@@ -12,20 +24,33 @@ export default class View {
         const parent = Object.getPrototypeOf(this);
         let classNames = parent._classNames || [];
 
-        // concat() to be sure to not mutate parent
-        // future: hyphenate the name
-        classNames = classNames.concat(this.name.toLowerCase());
+        // new array to be sure to not mutate parent
+        // todo: future: hyphenate the name
+        classNames = [this.name.toLowerCase(), ...classNames];
 
         classNameCache.set(this, classNames);
         return classNames;
     }
 
+    get template() {
+        return "<div>n/a</div>";
+    }
+
     constructor() {
-        const $element = $(this.constructor.template);
-        if ($element.length > 1) throw new Error('Templates must have a single root element.');
+        super();
+
+        let $element;
+        const $cachedElement = $elementCache.get(this);
+        if ($cachedElement) {
+            $element = $cachedElement.clone();
+        } else {
+            $element = $(this.template);
+            if ($element.length !== 1) throw new Error('Templates must have a single root element.');
+
+            $element[0].classList.add(...this.constructor._classNames);
+            $elementCache.set(this, $element.clone());
+        }
 
         this.$element = $element;
-        this.$element[0].classList.add(...this.constructor._classNames);
-        console.log(this.$element);
     }
 }

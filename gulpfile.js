@@ -35,6 +35,12 @@ const license = () => {
     return insert.prepend(txt);
 };
 
+const globalJS = () => {
+    return insert.prepend([
+        require.resolve('babel-polyfill/dist/polyfill.js'),
+        require.resolve('jquery')
+    ].map(e => fs.readFileSync(e, 'utf8') + '\n\n').join(''));
+};
 
 const rollupPlugins = [ // todo: order
     eslint({
@@ -42,12 +48,14 @@ const rollupPlugins = [ // todo: order
     }),
 
     inject({
-        $: 'jquery',
+        // $: 'jquery', // handled by gulp
+        mix: ['mixwith/src/mixwith.js', 'mix'],
+
     }),
     babel({
         plugins: ["external-helpers"],
         presets: [['latest', {es2015: {modules: false}}]],
-        exclude: ['node_modules/**'],
+        exclude: ['./node_modules/**'],
         include: ['./src/**/*.js'],
         sourceMaps: false,
     }),
@@ -60,7 +68,6 @@ const rollupPlugins = [ // todo: order
     commonjs(),
     string({
         include: './src/**/*.html',
-        exclude: ['./src/index.html'],
     }),
 ];
 
@@ -75,6 +82,7 @@ gulp.task('js', () => rollup(
     .pipe(source('index.js', './src')) // point to the entry file.
     .pipe(buffer()) // buffer the output. most gulp plugins, including gulp-sourcemaps, don't support streams.
     .pipe(sourcemaps.init({loadMaps: true})) // tell gulp-sourcemaps to load the inline sourcemap produced by rollup-stream.
+    .pipe(globalJS())
     .pipe(license())
     .pipe(rename('script.js'))
     .pipe(sourcemaps.write('.'))
@@ -97,14 +105,14 @@ gulp.task('css', () => gulp.src('./src/**/*.scss')
     .pipe(gulp.dest('./dist'))
 );
 
-gulp.task('copy', () => gulp.src('./src/index.html')
+gulp.task('copy', () => gulp.src('./static/**')
    .pipe(gulp.dest('./dist'))
 );
 
 
 gulp.task('default', ['js', 'css', 'copy']);
 gulp.task('watch', ['default'], () => [
-    gulp.watch('./src/**/*.js', ['js']),
+    gulp.watch('./src/**/*.{js,html}', ['js']),
     gulp.watch('./src/**/*.scss', ['css']),
     gulp.watch('./src/index.html', ['copy']),
 ]);
