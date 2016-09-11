@@ -2,6 +2,7 @@
 
 // Node
 const fs = require('fs');
+const path = require('path');
 
 // Gulp
 const gulp = require('gulp');
@@ -20,6 +21,7 @@ const eslint = require('rollup-plugin-eslint');
 const inject = require('rollup-plugin-inject');
 // const strip = require('rollup-plugin-strip');
 const commonjs = require('rollup-plugin-commonjs');
+const string = require('rollup-plugin-string');
 
 // CSS
 const sass = require('gulp-sass');
@@ -35,14 +37,19 @@ const license = () => {
 
 
 const rollupPlugins = [ // todo: order
-    eslint(),
+    eslint({
+        include: ['./src/**/*.js'],
+    }),
 
     inject({
         $: 'jquery',
     }),
     babel({
-        presets: ['es2015-rollup'],
-        exclude: ['node_modules/**'], // , '*.scss'
+        plugins: ["external-helpers"],
+        presets: [['latest', {es2015: {modules: false}}]],
+        exclude: ['node_modules/**'],
+        include: ['./src/**/*.js'],
+        sourceMaps: false,
     }),
 
     nodeResolve({
@@ -51,6 +58,10 @@ const rollupPlugins = [ // todo: order
         preferBuiltins: false,
     }),
     commonjs(),
+    string({
+        include: './src/**/*.html',
+        exclude: ['./src/index.html'],
+    }),
 ];
 
 // basic gulp + rollup from https://github.com/gulpjs/gulp/blob/master/docs/recipes/rollup-with-rollup-stream.md
@@ -65,11 +76,10 @@ gulp.task('js', () => rollup(
     .pipe(buffer()) // buffer the output. most gulp plugins, including gulp-sourcemaps, don't support streams.
     .pipe(sourcemaps.init({loadMaps: true})) // tell gulp-sourcemaps to load the inline sourcemap produced by rollup-stream.
     .pipe(license())
-    .pipe(rename('main.js'))
+    .pipe(rename('script.js'))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('./dist'))
 );
-
 
 const postcssPlugins = [ // todo: order
     autoprefixer(),
@@ -77,21 +87,28 @@ const postcssPlugins = [ // todo: order
 
 gulp.task('css', () => gulp.src('./src/**/*.scss')
     .pipe(sourcemaps.init())
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass({
+        includePaths: [path.dirname(require.resolve('normalize.css'))],
+    }).on('error', sass.logError))
     .pipe(postcss(postcssPlugins))
     .pipe(license())
-    .pipe(rename('main.css'))
+    .pipe(rename('style.css'))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('./dist'))
 );
 
+gulp.task('copy', () => gulp.src('./src/index.html')
+   .pipe(gulp.dest('./dist'))
+);
+
+
+gulp.task('default', ['js', 'css', 'copy']);
 gulp.task('watch', ['default'], () => [
     gulp.watch('./src/**/*.js', ['js']),
     gulp.watch('./src/**/*.scss', ['css']),
+    gulp.watch('./src/index.html', ['copy']),
 ]);
-
 gulp.task('serve', ['watch'], serve('dist'));
 
-gulp.task('default', ['js', 'css']);
 
 // todo: prod build task with minification, sourcemap skipping, strip()

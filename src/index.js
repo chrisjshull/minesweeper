@@ -1,8 +1,8 @@
 
 import 'babel-polyfill';
 
-console.log(133);
-debugger;
+import Board from './board';
 
+const board = new Board({width: 9, height: 9, mineCount: 10});
 
-$('body').append('foo');
+board._logDebug();

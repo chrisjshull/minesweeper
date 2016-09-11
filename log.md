@@ -9,6 +9,12 @@ rollup is more suited for JS than CSS, so chose to wrap it in gulp.
 Using jQuery mostly for dev ergonomics.
 
 
+use _ for weak private ...
+
+// board captures clicks on gameover?
+
+
+
 goals:
 learn new build tooling
 rtl, loc
@@ -18,6 +24,9 @@ mobile support
 webcomponents
 tests
 
+
+todo:
+get babel to happen pre-sourcemap
 
 
 
