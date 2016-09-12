@@ -116,7 +116,10 @@ export default class Board extends View {
     _gameOver(hasWon) {
         if (this.winState) return;
         this.winState = hasWon ? 'win' : 'lose';
-        // todo: remove all listeners
+
+        for (const cell of this._eachCell()) {
+            if (cell.hasMine) cell.reveal();
+        }
     }
 
     get _eachCell() {

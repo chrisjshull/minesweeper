@@ -54,6 +54,25 @@ footer {
     }
 }
 
+img.birds {
+    pointer-events: none;
+    position: fixed;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    border: 50vmax solid #000;
+    opacity: 0;
+    max-height: calc(100% - 20px);
+    max-width: calc(100% - 20px);
+
+    &:not(.show) {
+        transition: opacity 2s ease-out;
+    }
+    &.show {
+        opacity: 1;
+    }
+}
+
 @font-face {
     font-family: 'Underwood Champion';
     src: url('underwoodchampion_regular/underwood_champion-webfont.eot');
