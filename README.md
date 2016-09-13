@@ -4,9 +4,9 @@ by Chris J. Shull
 
 ## To run
 
- 1. `npm install`
- 2. `npm run serve`
- 3. open http://localhost:3000
+1. `npm install`
+2. `npm run serve`
+3. open http://localhost:3000
 
 or
 
@@ -17,12 +17,12 @@ or
 
 ## Tested on
 
- - macOS / Safari 9.1.2 (also VoiceOver tested)
- - iOS 9.3.5 (iPhone) / Safari (also VoiceOver tested)
- - macOS / Chrome 52.0.2743.116
- - macOS / Firefox 48.0.2
+- macOS / Safari 9.1.2 (also VoiceOver tested)
+- iOS 9.3.5 (iPhone) / Safari (also VoiceOver tested)
+- macOS / Chrome 52.0.2743.116
+- macOS / Firefox 48.0.2
 
-## Thought process:
+## Approach:
 
 
 

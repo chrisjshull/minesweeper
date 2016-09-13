@@ -6,65 +6,52 @@ I started with Rollup because it looked interesting, but eventually added Gulp f
 Runtime code wise I wanted to stay very vanilla, but decided to bring in jQuery for DOM manipulation ergonomics.
 
 While coding I set myself a few goals:
- - Localizable, and RTL-ready
- - Keyboard playable
- - Accessible (screen reader support, zoomable, proper color contrast)
- - Flexible layout
- - Mobile support
+- Localizable, and RTL-ready
+- Keyboard playable
+- Accessible (screen reader support, zoomable, proper color contrast)
+- Flexible layout
+- Mobile support
+
+While I started protoyping with a plain `<table>`, I ended up not using table layout because inner-cell layout is so persnickety. At that point Safari did not to recognize the element sematics anymore (for accessibility), so I switched to `<div>`s with ARIA.
 
 
 
-While the game currently doesn't expose the settings in the UI, the logic is not fixed to any particular dimensions or mine count.
-
-use _ for weak private ...
-
-instead of text color, used background color - more readable, IMO
-
-Using an emoji for the mine is fun, but could lead to cross-platform issues.
-Would likely want to replace that.
-(Fun fact though: VoiceOver speaks "bomb" quite nicely.)
-
-document.documentElement.dir = "rtl"
-tab twice, or click the col/row header and then arrow keys
-
-goals:
-tests
 
 
-todo:
-get babel to happen pre-sourcemap
-gulp serve/watch should not exit on error
-docs
-tests
 
 
+## Misc. notes:
+
+ - You can test RTL layout you running `document.documentElement.dir = "rtl"` in the JS console.
+
+- To get the the keyboard controls you can:
+    - hit `tab` twice, or
+    - click your first cell.
+
+- Once the board is focused, you can press:
+    - arrow keys to move around
+    - `enter` or `space` to "click" a cell
+
+- While the game currently doesn't expose the settings in the UI, the logic is not fixed to any particular dimensions or mine count.
+
+- Instead of text color in the cells, I used used background color because I felt it was more readable.
+
+- Using an emoji for the mine is fun, but could lead to cross-platform issues. Would likely want to replace that. (Fun fact though: VoiceOver speaks "bomb" quite nicely.)
+
+- I love recursive reveal fades for tiled games like this. But depth-first recursion works nicely for cycle-avoidance, so I based the animation on distance from the original target.
+
+
+## Future:
+
+- Tests
+- JSDocs
+- Have the sourcemaps show post-Babel code
+- Gulp serve/watch should not exit on error
+
+
+
+more able miny framework
+voiceover video
 index.js factoring?
-
-
-while I started protoyping with a plain `<table>`,
-I ended up not using table layout because inner-cell layout
-is so persnickety. (despite being semantic elements, this
-cuased Safari not to recognize their sematics anymore, so switched to
-`<div>`s with ARIA)
-
-The challenge was a bit simple, so for fun I added a few extra things.
-Chiefly, it's fully accessible so that (e.g.) blind people can play it. :)
-You can also play with just the keyboard (hit tab twice, and then you can use the arrow keys and the spacebar).
-It's also right-to-left ready, so if it were translated to (e.g.) Hebrew the entire layout would flip. (see below)
-
-
 MVC?
-
-I love little recursive reveal animation for tiles games like this.
-Depth-first recursion works nicely though for easier cycle-avoidance,
-so based the animation on distance from the original target.
-
-
-
-
-The user clicks on a squares to uncover them. Each time:
-If the square contains a mine, the user loses and game is over!
-If the square is adjacent to a mine, the square displays the total number of mines in the 8 squares around it
-If the square is neither a mine or adjacent to a mine, the square displays a blank, and should behave as if the 8 adjacent squares were also clicked (recursively applying this algorithm)
-
-The user wins when they uncover all squares that don’t have mines.
+prod build task with minification, sourcemap skipping, strip()

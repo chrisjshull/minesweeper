@@ -42,7 +42,7 @@ const globalJS = () => {
     ].map(e => fs.readFileSync(e, 'utf8') + '\n\n').join(''));
 };
 
-const rollupPlugins = [ // todo: order
+const rollupPlugins = [
     eslint({
         include: ['./src/**/*.js'],
     }),
@@ -87,7 +87,7 @@ gulp.task('js', () => rollup(
     .pipe(gulp.dest('./dist'))
 );
 
-const postcssPlugins = [ // todo: order
+const postcssPlugins = [
     autoprefixer(),
 ];
 
@@ -116,5 +116,3 @@ gulp.task('watch', ['default'], () => [
 ]);
 gulp.task('serve', ['watch'], serve('dist'));
 
-
-// todo: prod build task with minification, sourcemap skipping, strip()

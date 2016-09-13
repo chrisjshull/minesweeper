@@ -8,7 +8,7 @@ const loc = (keyOrNumber, ...args) => {
 
 export default loc;
 
-// todo: factor this out to a service.
+// future: factor this out to a service.
 const translations = {
     lang: "en",
     dir: "ltr",

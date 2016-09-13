@@ -1,6 +1,5 @@
-import Base from './base';
+import Base, {staticAccumulator} from './base';
 
-const classNameCache = new Map();
 const $elementCache = new Map();
 
 export default class View extends Base {
@@ -12,18 +11,7 @@ export default class View extends Base {
     }
 
     static get _classNames() {
-        const cached = classNameCache.get(this);
-        if (cached) return cached;
-
-        const parent = Object.getPrototypeOf(this);
-        let classNames = parent._classNames || [];
-
-        // new array to be sure to not mutate parent
-        // todo: future: hyphenate the name
-        classNames = [this.name.toLowerCase(), ...classNames];
-
-        classNameCache.set(this, classNames);
-        return classNames;
+        return accumulateClassNames(this);
     }
 
     get template() {
@@ -51,3 +39,9 @@ export default class View extends Base {
         $element[0]._view = this;
     }
 }
+
+const accumulateClassNames = staticAccumulator(View, function (klass, parentItems=[]) {
+    // new array to be sure to not mutate parent
+    // future: hyphenate the name
+    return [klass.name.toLowerCase(), ...parentItems];
+});

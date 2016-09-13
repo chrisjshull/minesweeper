@@ -66,7 +66,7 @@ export default class Cell extends View {
 
         this.$element.off('click');
 
-        const distance = Math.sqrt(Math.pow(_source.x - this.x, 2) + Math.pow(_source.y - this.y, 2))
+        const distance = Math.sqrt(Math.pow(_source.x - this.x, 2) + Math.pow(_source.y - this.y, 2));
 
         this.$element.css('transition-delay', `${distance / 10}s`);
         let toShow = '';
@@ -76,7 +76,7 @@ export default class Cell extends View {
         } else if (this._neighboringMineCount) {
             toShow = this._neighboringMineCount;
             toShowLoc = loc(toShow);
-        };
+        }
         this.$element.text(toShowLoc)[0].dataset.shown = toShow;
 
         if (!toShow) {

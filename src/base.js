@@ -1,6 +1,5 @@
 
-// Create a base class since babel borks on `extends Object`
-// which you might want for mixin purposes.
+// Create a basic property observation system.
 
 export default class Base {
     static get observables() {
@@ -12,16 +11,14 @@ export default class Base {
     }
 
     constructor() {
-
         this._observers = {};
 
-        // todo: future: investigate doing this just once on the prototype
+        // future: investigate doing this just once on the prototype
         for (const key of this.constructor._observables) {
             this._observers[key] = new Set();
 
             if (key in this) {
-                // todo
-                throw new Error(`Observing properties with accessors not yet supported (key ${key}).`);
+                throw new Error(`Observing properties with accessors not yet supported (key "${key}").`);
             }
 
             const sym = Symbol(key);
@@ -67,6 +64,7 @@ export default class Base {
     }
 }
 
+// Provide a way to walk up the class heirarchy accumulating all parent values.
 export const staticAccumulator = (baseClass, builder, useCache=true) => {
     const cache = useCache && new Map();
     return function accumulate(fromClass) {

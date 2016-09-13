@@ -21,7 +21,7 @@ module.exports = {
         "array-bracket-spacing": ["error", "never"],
         "object-curly-spacing": ["error", "never"],
 
-        // these stripped by tools
+        // future: these stripped by tools
         "no-console": [0],
         "no-debugger": [0],
     },
