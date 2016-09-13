@@ -1,6 +1,6 @@
 import View from './view';
-
 import {thText} from './board';
+import loc from './loc';
 
 export default class Cell extends View {
     static get observables() {
@@ -60,18 +60,28 @@ export default class Cell extends View {
         return Array.from(this._neighbors()).reduce((ct, cell) => ct + cell.hasMine, 0);
     }
 
-    reveal() {
+    reveal(_source = this) {
         if (this.isRevealed) return;
         this.isRevealed = true;
 
         this.$element.off('click');
 
-        const toShow = this.hasMine ? '💣' : (this._neighboringMineCount || '');
-        this.$element.text(toShow)[0].dataset.shown = toShow;
+        const distance = Math.sqrt(Math.pow(_source.x - this.x, 2) + Math.pow(_source.y - this.y, 2))
+
+        this.$element.css('transition-delay', `${distance / 10}s`);
+        let toShow = '';
+        let toShowLoc = '';
+        if (this.hasMine) {
+            toShow = toShowLoc = '💣';
+        } else if (this._neighboringMineCount) {
+            toShow = this._neighboringMineCount;
+            toShowLoc = loc(toShow);
+        };
+        this.$element.text(toShowLoc)[0].dataset.shown = toShow;
 
         if (!toShow) {
             for (const cell of this._neighbors()) {
-                cell.reveal();
+                cell.reveal(_source);
             }
         }
     }

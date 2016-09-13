@@ -3,13 +3,12 @@
   "version": "0.0.1",
   "main": "dist/index.js",
   "scripts": {
-    "gulp": "gulp",
-    "build": "rollup -c",
-    "build-prod": "rollup -c --environment BUILD:prod",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "gulp",
+    "serve": "gulp serve"
   },
   "author": "chrisjshull@gmail.com",
-  "license": "MIT",
+  "license": "UNLICENSED",
+  "private": true,
   "description": "",
   "devDependencies": {
     "autoprefixer": "^6.4.1",

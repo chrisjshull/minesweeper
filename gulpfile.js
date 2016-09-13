@@ -48,9 +48,7 @@ const rollupPlugins = [ // todo: order
     }),
 
     inject({
-        // $: 'jquery', // handled by gulp
         mix: ['mixwith/src/mixwith.js', 'mix'],
-
     }),
     babel({
         plugins: ["external-helpers"],

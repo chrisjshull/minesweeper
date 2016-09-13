@@ -1,7 +1,8 @@
 import Cell from './cell';
 import View from './view';
+import loc from './loc';
 
-export const thText = i => i >= 0 ? String.fromCharCode(i + 65) : '';
+export const thText = i => i >= 0 ? loc('axisLabels')[i] : '';
 
 export default class Board extends View {
     static get observables() {
@@ -11,7 +12,7 @@ export default class Board extends View {
     get template() {
         // Set tabindex so there's always a way for the non-screenreader
         // keyboard user to focus the table (and get access to arrow controls).
-        return '<div tabindex="0" role="grid"></div>';
+        return `<div tabindex="0" role="grid" aria-label="${loc('board')}"></div>`;
     }
 
     constructor(opts) {
@@ -49,7 +50,7 @@ export default class Board extends View {
         }
 
         // set up DOM
-        // Normally we'd want some role="columnheader" role="rowheader"
+        // Normally we'd want some role="columnheader" and role="rowheader"
         // but we've added labels to the cells/buttons that cover that need (better)
         this.$element.append(
             $('<div aria-hidden="true">').append(
@@ -116,6 +117,7 @@ export default class Board extends View {
     _gameOver(hasWon) {
         if (this.winState) return;
         this.winState = hasWon ? 'win' : 'lose';
+        this.$element[0].dataset.state = this.winState;
 
         for (const cell of this._eachCell()) {
             if (cell.hasMine) cell.reveal();

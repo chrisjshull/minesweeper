@@ -1,5 +1,5 @@
 
-@mixin for-count($ct, $background-color, $color: null) {
+@mixin for-shown($ct, $background-color, $color: null) {
     &[data-shown="#{$ct}"] {
         background-color: $background-color;
         @if $color { color: $color;  }
@@ -17,7 +17,8 @@
         border: none;
         padding: 0;
         cursor: pointer;
-        background-color: hsl(0, 0%, 90%);
+        background: none;
+        display: block; // for FF
     }
 
     // after we remove the button, the cell can still get focus
@@ -33,16 +34,25 @@
         cursor: default;
     }
 
-    // &:hover:not([data-shown])
+    transition: none .2s ease;
+    transition-property: background-color, color;
+    &:not([data-shown]) {
+        color: transparent;
+        background-color: hsl(0, 0%, 90%);
+    }
+    @include for-shown('💣', hsl(11, 93%, 70%));
+    [data-state='win'] & {
+        @include for-shown('💣', hsl(100, 46%, 66%));
+    }
+    @include for-shown(1, hsl(209, 90%, 95%));
+    @include for-shown(2, hsl(100, 46%, 86%));
+    @include for-shown(3, hsl(51, 93%, 80%));
+    @include for-shown(4, hsl(32, 84%, 80%));
+    @include for-shown(5, hsl(11, 93%, 80%));
+    @include for-shown(6, hsl(270, 34%, 80%));
+    @include for-shown(7, hsl(270, 34%, 40%), #fff);
+    @include for-shown(8, #000, #fff);
 
-    @include for-count(1, hsl(209, 90%, 95%));
-    @include for-count(2, hsl(100, 46%, 86%));
-    @include for-count(3, hsl(51, 93%, 80%));
-    @include for-count(4, hsl(32, 84%, 80%));
-    @include for-count(5, hsl(11, 93%, 80%));
-    @include for-count(6, hsl(270, 34%, 80%));
-    @include for-count(7, hsl(270, 34%, 40%), #fff);
-    @include for-count(8, #000, #fff);
 
     border: 1px solid #999;
     // simuluate border collapse

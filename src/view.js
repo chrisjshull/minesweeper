@@ -3,19 +3,6 @@ import Base from './base';
 const classNameCache = new Map();
 const $elementCache = new Map();
 
-// const Obs = Superclass => class extends Superclass {
-//     constructor() {
-//         super(...arguments);
-//         this._observableKeys = new Set();
-//     }
-//
-//     observe(key) {
-//
-//     }
-// };
-
-// mix(Base).with(Obs)
-
 export default class View extends Base {
     static forElement($element) {
         // handle raw DOM too

@@ -1,39 +1,33 @@
-Using rollupjs because i hadn't before and it looked interesting.
-Additionally, this seemed like a task that wouldn't require a big MVC framework.
-Which meant I could also play with some vanilla JS, esp. some of the ES2015
-stuff that hasn't been adopted by those frameworks yet.
 
-rollup is more suited for JS than CSS, so chose to wrap it in gulp.
-(Hae also never used gulp before and it felt like a good choice, and a good learning oppertunity)
+This didn't seem like a task that begged for a big MVC framework, which intrigued me for two reasons: 1) I could try out some new (to me) build tools, and 2) I could play with some modern JS concepts that have been floating around in my head.
 
-Using jQuery mostly for dev ergonomics.
+I started with Rollup because it looked interesting, but eventually added Gulp for non-JS related build tasks. I'm also particular to SASS and Autoprefixer so got those running too.
 
+Runtime code wise I wanted to stay very vanilla, but decided to bring in jQuery for DOM manipulation ergonomics.
+
+While coding I set myself a few goals:
+ - Localizable, and RTL-ready
+ - Keyboard playable
+ - Accessible (screen reader support, zoomable, proper color contrast)
+ - Flexible layout
+ - Mobile support
+
+
+
+While the game currently doesn't expose the settings in the UI, the logic is not fixed to any particular dimensions or mine count.
 
 use _ for weak private ...
 
-// board captures clicks on gameover?
-
-instead of text color, used background color - more readable, IM)
-
-colors should pass contrast AX standards
-
-you cn navigate this with the keyboard
-(you can also use tab/shift-tab, or your screen readaer's keys)
-
-Accessibility tested most with VoiceOver in Safari (desktop).
+instead of text color, used background color - more readable, IMO
 
 Using an emoji for the mine is fun, but could lead to cross-platform issues.
 Would likely want to replace that.
 (Fun fact though: VoiceOver speaks "bomb" quite nicely.)
 
+document.documentElement.dir = "rtl"
+tab twice, or click the col/row header and then arrow keys
 
 goals:
-learn new build tooling
-rtl, loc
-ax
-flexible layout
-mobile support
-webcomponents
 tests
 
 
@@ -42,7 +36,9 @@ get babel to happen pre-sourcemap
 gulp serve/watch should not exit on error
 docs
 tests
-reveal animation
+
+
+index.js factoring?
 
 
 while I started protoyping with a plain `<table>`,
@@ -51,22 +47,20 @@ is so persnickety. (despite being semantic elements, this
 cuased Safari not to recognize their sematics anymore, so switched to
 `<div>`s with ARIA)
 
+The challenge was a bit simple, so for fun I added a few extra things.
+Chiefly, it's fully accessible so that (e.g.) blind people can play it. :)
+You can also play with just the keyboard (hit tab twice, and then you can use the arrow keys and the spacebar).
+It's also right-to-left ready, so if it were translated to (e.g.) Hebrew the entire layout would flip. (see below)
 
 
-Features to cover in your implementation:
-Consistent display of the game board
-Implementation of the square uncovering algorithm above
-Different colors for different square numbers
-When the user wins or loses, indicate which squares had mines
-Indicate whether the user has won or lost
-Some way of restarting the game
+MVC?
 
-Other notes:
-You can use any visual style, as long as the different square states are clear
-Don’t worry about other features from the original game (flagging, a timer, scores)
-Please use a JavaScript framework that you’re comfortable with (Backbone, React, Angular, Gulp, Browserify, etc.)
+I love little recursive reveal animation for tiles games like this.
+Depth-first recursion works nicely though for easier cycle-avoidance,
+so based the animation on distance from the original target.
 
-The game consists of a 9x9 grid of squares, with 10 “mines” randomly hidden in 10 of the squares.
+
+
 
 The user clicks on a squares to uncover them. Each time:
 If the square contains a mine, the user loses and game is over!
