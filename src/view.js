@@ -15,7 +15,7 @@ export default class View extends Base {
     }
 
     get template() {
-        return "<div>n/a</div>";
+        return "<div></div>";
     }
 
     constructor() {
