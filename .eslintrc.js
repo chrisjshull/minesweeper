@@ -20,6 +20,8 @@ module.exports = {
         "comma-spacing": ["error", {"before": false, "after": true}],
         "array-bracket-spacing": ["error", "never"],
         "object-curly-spacing": ["error", "never"],
+        "prefer-const": ["error", {"destructuring": "all"}],
+        "no-var": ["error"],
 
         // future: these stripped by tools
         "no-console": [0],

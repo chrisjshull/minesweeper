@@ -12,6 +12,8 @@ const buffer = require('vinyl-buffer');
 const rename = require('gulp-rename');
 const insert = require('gulp-insert');
 const serve = require('gulp-serve');
+const rsync = require('gulp-rsync');
+const manifest = require('gulp-manifest');
 
 // JS
 const rollup = require('rollup-stream');
@@ -107,12 +109,34 @@ gulp.task('copy', () => gulp.src('./static/**')
    .pipe(gulp.dest('./dist'))
 );
 
-
-gulp.task('default', ['js', 'css', 'copy']);
+// do an app cache manifest, pending universal service worker support
+gulp.task('default', ['js', 'css', 'copy'], () => gulp.src('./dist/**', {base: './dist'})
+    .pipe(manifest({
+        filename: 'app.manifest',
+        exclude: ['app.manifest', '*.map', 'underwoodchampion_regular/*.txt'],
+        timestamp: true,
+        cache: ['https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en'],
+        //fallback: ['https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en intl-en-fallback.js']
+    }))
+    .pipe(gulp.dest('./dist'))
+);
 gulp.task('watch', ['default'], () => [
     gulp.watch('./src/**/*.{js,html}', ['js']),
     gulp.watch('./src/**/*.scss', ['css']),
     gulp.watch('./src/index.html', ['copy']),
 ]);
-gulp.task('serve', ['watch'], serve('dist'));
+gulp.task('serve', ['watch'], serve('./dist'));
 
+
+gulp.task('deploy', () => gulp.src('./dist/**')
+   .pipe(rsync({
+       root: 'dist/',
+       hostname: 'cshull@shullian.com',
+       destination: 'mines.chrisjshull.com',
+       //dryrun: true,
+       // archive: true,
+       // compress: true,
+       // silent: false,
+       // delete: true
+   }))
+);
