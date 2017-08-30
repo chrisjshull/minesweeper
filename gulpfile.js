@@ -53,7 +53,7 @@ const rollupPlugins = [
         mix: ['mixwith/src/mixwith.js', 'mix'],
     }),
     babel({
-        plugins: ["external-helpers"],
+        plugins: ["external-helpers"], // why did I do this again?
         presets: [['latest', {es2015: {modules: false}}]],
         exclude: ['./node_modules/**'],
         include: ['./src/**/*.js'],
